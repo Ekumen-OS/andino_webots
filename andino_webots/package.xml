@@ -4,7 +4,7 @@
   <name>andino_webots</name>
   <version>0.0.1</version>
   <description>Webots simulation of the Andino robot</description>
-  <maintainer email="ignacio.davila@@ekumenlabs.com">Ignacio Davila</maintainer>
+  <maintainer email="ignacio.davila@ekumenlabs.com">Ignacio Davila</maintainer>
   <maintainer email="franco.c@ekumenlabs.com">Franco Cipollone</maintainer>
   <maintainer email="christianbarcelo@ekumenlabs.com">Christian Barcelo</maintainer>
 
