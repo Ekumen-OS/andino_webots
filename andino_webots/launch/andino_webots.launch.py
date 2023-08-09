@@ -43,11 +43,13 @@ from webots_ros2_driver.webots_launcher import WebotsLauncher
 from webots_ros2_driver.webots_controller import WebotsController
 
 # Obtain packages
-curr_pkg_dir = get_package_share_directory('andino_webots')
+andino_webots_pkg_dir = get_package_share_directory('andino_webots')
 andino_gazebo_pkg_dir = get_package_share_directory('andino_gazebo')
 
 def generate_launch_description():
 
+    # In order for the generated proto to add Webots senors the origin urdf must contain gazebo-specific sensors.
+    # The andino_gazebo xacro is used as base rather than the andino description to addresss this
     andino_gazebo_xacro_path = os.path.join(andino_gazebo_pkg_dir, 'urdf', 'andino.gazebo.xacro')
     andino_gazebo_description = xacro.process_file(andino_gazebo_xacro_path, mappings={'use_gazebo_ros_control': 'False', 'use_fixed_caster': "False"}).toprettyxml(indent='    ')
 
@@ -64,12 +66,12 @@ def generate_launch_description():
     # - `mode` (str):               Can be `pause`, `realtime`, or `fast`.
     # - `ros2_supervisor` (bool):   Spawn the `Ros2Supervisor` custom node that communicates with a Supervisor robot in the simulation.
     webots = WebotsLauncher(
-        world=PathJoinSubstitution([curr_pkg_dir, 'worlds', world]),
+        world=PathJoinSubstitution([andino_webots_pkg_dir, 'worlds', world]),
         ros2_supervisor=True
     )
 
     # webots_ros2 node to spawn robots from URDF
-    # TODO Update to PROTOSpawner when implementation is released
+    # TODO(#12): Update to PROTOSpawner when implementation is released
     spawn_andino = URDFSpawner(
         name='andino',
         robot_description=andino_gazebo_description,
@@ -85,7 +87,7 @@ def generate_launch_description():
         webots,
         # Starts the Ros2Supervisor node created with the WebotsLauncher
         webots._supervisor,
-        # Spawn Noah's URDF
+        # Spawn Andino's URDF
         spawn_andino,
         # This action will kill all nodes once the Webots simulation has exited
         launch.actions.RegisterEventHandler(
