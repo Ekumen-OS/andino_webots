@@ -54,6 +54,7 @@ def generate_launch_description():
     andino_gazebo_description = xacro.process_file(andino_gazebo_xacro_path, mappings={'use_gazebo_ros_control': 'False', 'use_fixed_caster': "False"}).toprettyxml(indent='    ')
 
     world = LaunchConfiguration('world')
+    use_sim_time = LaunchConfiguration('use_sim_time', default=True) # Use the /clock topic to synchronize the ROS controller with the simulation
 
     world_argument = DeclareLaunchArgument(
         'world',
@@ -78,6 +79,17 @@ def generate_launch_description():
         translation='0 0 0.022',
         rotation=' 0 0 1 0',
     )
+    # Webots Controller to initialize cameras/LIDARs
+    andino_webots_path = os.path.join(curr_pkg_dir, 'urdf', 'andino_webots.urdf')
+    andino_webots_controller = WebotsController(
+        robot_name='andino',
+        parameters=[
+            {'robot_description': andino_webots_path,
+             'use_sim_time': use_sim_time,
+            },
+        ],
+        respawn=True
+    )
 
     # Standard ROS 2 launch description
     return launch.LaunchDescription([
@@ -89,6 +101,8 @@ def generate_launch_description():
         webots._supervisor,
         # Spawn Andino's URDF
         spawn_andino,
+        # Add andino's controller
+        andino_webots_controller,
         # This action will kill all nodes once the Webots simulation has exited
         launch.actions.RegisterEventHandler(
             event_handler=launch.event_handlers.OnProcessExit(

@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<robot name="Andino Webots">
+    <webots>
+
+        <device reference="camera" type="Camera">
+            <ros>
+                <topicName>/andino_camera</topicName>
+                <alwaysOn>True</alwaysOn>
+            </ros>
+        </device>
+
+        <device reference="sensor_ray_front" type="Lidar">
+            <ros>
+                <topicName>/andino_scan</topicName>
+                <alwaysOn>True</alwaysOn>
+            </ros>
+        </device>
+    </webots>
+</robot>
