@@ -6,6 +6,7 @@
             <ros>
                 <topicName>/andino_camera</topicName>
                 <alwaysOn>True</alwaysOn>
+                <frameName>camera_link</frameName>
             </ros>
         </device>
 
@@ -13,6 +14,7 @@
             <ros>
                 <topicName>/andino_scan</topicName>
                 <alwaysOn>True</alwaysOn>
+                <frameName>rplidar_laser_link</frameName>
             </ros>
         </device>
     </webots>

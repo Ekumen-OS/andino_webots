@@ -46,12 +46,37 @@ from webots_ros2_driver.webots_controller import WebotsController
 andino_webots_pkg_dir = get_package_share_directory('andino_webots')
 andino_gazebo_pkg_dir = get_package_share_directory('andino_gazebo')
 
+# def configure_gazebo_sensor(robot_description: str):
+#     import xml.etree.ElementTree as ET
+#     root = ET.fromstring(robot_description)
+#     for sensor in root.findall(".//sensor[@type='ray']"):
+#         ray_tag = root.find("./ray")
+
+#         clip_tag = ET.Element("clip")
+#         near_tag = ET.Element("near")
+#         near_tag.text = "0.05"
+
+#         clip_tag.append(near_tag)
+#         ray_tag.append(clip_tag)
+
+#     return ET.tostring(root, encoding="unicode")
+
+def configure_gazebo_sensor(robot_description: str):
+    robot_description = robot_description.replace("</ray>", """
+                    <clip>
+                        <near>0.05</near>
+                    </clip>
+                </ray>
+    """)
+    return robot_description
+
 def generate_launch_description():
 
     # In order for the generated proto to add Webots senors the origin urdf must contain gazebo-specific sensors.
     # The andino_gazebo xacro is used as base rather than the andino description to addresss this
-    andino_gazebo_xacro_path = os.path.join(andino_gazebo_pkg_dir, 'urdf', 'andino.gazebo.xacro')
+    andino_gazebo_xacro_path = os.path.join(andino_webots_pkg_dir, 'urdf', 'andino_webots_description.urdf.xacro')
     andino_gazebo_description = xacro.process_file(andino_gazebo_xacro_path, mappings={'use_gazebo_ros_control': 'False', 'use_fixed_caster': "False"}).toprettyxml(indent='    ')
+    andino_gazebo_description = configure_gazebo_sensor(andino_gazebo_description)
 
     world = LaunchConfiguration('world')
     use_sim_time = LaunchConfiguration('use_sim_time', default=True) # Use the /clock topic to synchronize the ROS controller with the simulation
@@ -80,7 +105,7 @@ def generate_launch_description():
         rotation=' 0 0 1 0',
     )
     # Webots Controller to initialize cameras/LIDARs
-    andino_webots_path = os.path.join(curr_pkg_dir, 'urdf', 'andino_webots.urdf')
+    andino_webots_path = os.path.join(andino_webots_pkg_dir, 'urdf', 'andino_webots.urdf')
     andino_webots_controller = WebotsController(
         robot_name='andino',
         parameters=[
