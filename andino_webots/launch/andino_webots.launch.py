@@ -35,15 +35,17 @@ import xacro
 
 from ament_index_python.packages import get_package_share_directory
 from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions.path_join_substitution import PathJoinSubstitution
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from webots_ros2_driver.urdf_spawner import URDFSpawner
 from webots_ros2_driver.webots_launcher import WebotsLauncher
 from webots_ros2_driver.webots_controller import WebotsController
 
 # Obtain packages
 andino_webots_pkg_dir = get_package_share_directory('andino_webots')
+andino_description_pkg_dir = get_package_share_directory('andino_description')
 andino_gazebo_pkg_dir = get_package_share_directory('andino_gazebo')
 
 # def configure_gazebo_sensor(robot_description: str):
@@ -80,7 +82,7 @@ def generate_launch_description():
 
     world = LaunchConfiguration('world')
     use_sim_time = LaunchConfiguration('use_sim_time', default=True) # Use the /clock topic to synchronize the ROS controller with the simulation
-
+    use_rsp = LaunchConfiguration('rsp', default=True)
     world_argument = DeclareLaunchArgument(
         'world',
         default_value='andino_webots.wbt',
@@ -94,6 +96,15 @@ def generate_launch_description():
     webots = WebotsLauncher(
         world=PathJoinSubstitution([andino_webots_pkg_dir, 'worlds', world]),
         ros2_supervisor=True
+    )
+
+    rsp = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(andino_description_pkg_dir, 'launch', 'andino_description.launch.py')
+        ),
+        launch_arguments={
+            'rsp': use_rsp,
+        }.items(),
     )
 
     # webots_ros2 node to spawn robots from URDF
@@ -128,6 +139,7 @@ def generate_launch_description():
         spawn_andino,
         # Add andino's controller
         andino_webots_controller,
+        rsp,
         # This action will kill all nodes once the Webots simulation has exited
         launch.actions.RegisterEventHandler(
             event_handler=launch.event_handlers.OnProcessExit(
