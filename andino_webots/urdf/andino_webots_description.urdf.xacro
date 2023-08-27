@@ -1,24 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="andino">
-  <!-- 
-    In order for the generated proto to add Webots senors the origin urdf must contain gazebo-specific sensors.
-    The andino_gazebo xacro is used as base rather than the andino description to addresss this 
-  -->
+
   <xacro:include filename="$(find andino_gazebo)/urdf/andino.gazebo.xacro"/>
 
-  <link name="webots_camera_link">
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-        <box size="0.001 0.001 0.001"/>
-      </geometry>
-    </visual> 
-  </link> 
-
-  <joint name="camera_rotation_joint" type="fixed">
-    <parent link="camera_link"/>
-    <child link="webots_camera_link"/>
-    <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/>
-    <axis xyz="1 0 0" />
-  </joint>
 </robot>

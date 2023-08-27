@@ -6,7 +6,7 @@
             <ros>
                 <topicName>/andino_camera</topicName>
                 <alwaysOn>True</alwaysOn>
-                <frameName>webots_camera_link</frameName>
+                <frameName>camera_link</frameName>
             </ros>
         </device>
 
