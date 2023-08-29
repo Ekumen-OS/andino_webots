@@ -17,5 +17,21 @@
                 <frameName>rplidar_laser_link</frameName>
             </ros>
         </device>
+
+        <plugin type="webots_ros2_control::Ros2Control" />
     </webots>
+
+    <ros2_control name="WebotsControl" type="system">
+        <hardware>
+            <plugin>webots_ros2_control::Ros2ControlSystem</plugin>
+        </hardware>
+        <joint name="right_wheel_joint">
+            <state_interface name="position"/>
+            <command_interface name="velocity"/>
+        </joint>
+        <joint name="left_wheel_joint">
+            <state_interface name="position"/>
+            <command_interface name="velocity"/>
+        </joint>
+    </ros2_control>
 </robot>
