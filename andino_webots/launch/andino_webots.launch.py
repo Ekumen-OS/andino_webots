@@ -47,30 +47,43 @@ def configure_gazebo_sensors(robot_description: str):
     """
     Configures the lidar's near parameter and attaches the camera to a rotated frame so that
     """
-    robot_description = robot_description.replace("</ray>", """
+    robot_description = robot_description.replace(
+        "</ray>",
+        """
                     <clip>
                         <near>0.05</near>
                     </clip>
                 </ray>
-    """)
-    robot_description = robot_description.replace('<gazebo reference="camera_link">', '<gazebo reference="webots_camera_link">')
+    """,
+    )
+    robot_description = robot_description.replace(
+        '<gazebo reference="camera_link">', '<gazebo reference="webots_camera_link">'
+    )
     return robot_description
 
+
 # Obtain andino webots package
-andino_webots_pkg_dir = get_package_share_directory('andino_webots')
+andino_webots_pkg_dir = get_package_share_directory("andino_webots")
+
 
 def generate_launch_description():
-
-    andino_webots_xacro_path = os.path.join(andino_webots_pkg_dir, 'urdf', 'andino_webots_description.urdf.xacro')
-    andino_webots_description = xacro.process_file(andino_webots_xacro_path, mappings={'use_gazebo_ros_control': 'False', 'use_fixed_caster': "False"}).toprettyxml(indent='    ')
+    andino_webots_xacro_path = os.path.join(
+        andino_webots_pkg_dir, "urdf", "andino_webots_description.urdf.xacro"
+    )
+    andino_webots_description = xacro.process_file(
+        andino_webots_xacro_path,
+        mappings={"use_gazebo_ros_control": "False", "use_fixed_caster": "False"},
+    ).toprettyxml(indent="    ")
     andino_webots_description = configure_gazebo_sensors(andino_webots_description)
 
-    world = LaunchConfiguration('world')
-    use_sim_time = LaunchConfiguration('use_sim_time', default=True) # Use the /clock topic to synchronize the ROS controller with the simulation
-    use_rsp = DeclareLaunchArgument('rsp', default_value='true')
+    world = LaunchConfiguration("world")
+    use_sim_time = LaunchConfiguration(
+        "use_sim_time", default=True
+    )  # Use the /clock topic to synchronize the ROS controller with the simulation
+    use_rsp = DeclareLaunchArgument("rsp", default_value="true")
     world_argument = DeclareLaunchArgument(
-        'world',
-        default_value='andino_webots.wbt',
+        "world",
+        default_value="andino_webots.wbt",
     )
     # The WebotsLauncher is used to start a Webots instance.
     # Arguments:
@@ -79,61 +92,66 @@ def generate_launch_description():
     # - `mode` (str):               Can be `pause`, `realtime`, or `fast`.
     # - `ros2_supervisor` (bool):   Spawn the `Ros2Supervisor` custom node that communicates with a Supervisor robot in the simulation.
     webots = WebotsLauncher(
-        world=PathJoinSubstitution([andino_webots_pkg_dir, 'worlds', world]),
-        ros2_supervisor=True
+        world=PathJoinSubstitution([andino_webots_pkg_dir, "worlds", world]),
+        ros2_supervisor=True,
     )
 
-    params = {'robot_description': andino_webots_description,
-            'publish_frequency': 30.0}
+    params = {"robot_description": andino_webots_description, "publish_frequency": 30.0}
 
     # Robot state publisher
-    rsp = Node(package='robot_state_publisher',
-                executable='robot_state_publisher',
-                namespace='',
-                output='both',
-                parameters=[params],
-                condition=IfCondition(LaunchConfiguration('rsp'))
-    ) 
+    rsp = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        namespace="",
+        output="both",
+        parameters=[params],
+        condition=IfCondition(LaunchConfiguration("rsp")),
+    )
 
     # webots_ros2 node to spawn robots from URDF
     # TODO(#12): Update to PROTOSpawner when implementation is released
     spawn_andino = URDFSpawner(
-        name='andino',
+        name="andino",
         robot_description=andino_webots_description,
-        translation='0 0 0.022',
-        rotation=' 0 0 1 0',
+        translation="0 0 0.022",
+        rotation=" 0 0 1 0",
     )
     # Webots Controller to initialize cameras/LIDARs
-    andino_webots_path = os.path.join(andino_webots_pkg_dir, 'urdf', 'andino_webots.urdf')
+    andino_webots_path = os.path.join(
+        andino_webots_pkg_dir, "urdf", "andino_webots.urdf"
+    )
     andino_webots_controller = WebotsController(
-        robot_name='andino',
+        robot_name="andino",
         parameters=[
-            {'robot_description': andino_webots_path,
-             'use_sim_time': use_sim_time,
+            {
+                "robot_description": andino_webots_path,
+                "use_sim_time": use_sim_time,
             },
         ],
-        respawn=True
+        respawn=True,
     )
 
     # Standard ROS 2 launch description
-    return launch.LaunchDescription([
-        # Set the world argument
-        world_argument,
-        # Start the Webots node
-        webots,
-        # Starts the Ros2Supervisor node created with the WebotsLauncher
-        webots._supervisor,
-        # Spawn Andino's URDF
-        spawn_andino,
-        # Add andino's controller
-        andino_webots_controller,
-        use_rsp,
-        rsp,
-        # This action will kill all nodes once the Webots simulation has exited
-        launch.actions.RegisterEventHandler(
-            event_handler=launch.event_handlers.OnProcessExit(
-                target_action=webots,
-                on_exit=[launch.actions.EmitEvent(event=launch.events.Shutdown())],
-            )
-        )
-    ])
+    return launch.LaunchDescription(
+        [
+            # Set the world argument
+            world_argument,
+            # Start the Webots node
+            webots,
+            # Starts the Ros2Supervisor node created with the WebotsLauncher
+            webots._supervisor,
+            # Spawn Andino's URDF
+            spawn_andino,
+            # Add andino's controller
+            andino_webots_controller,
+            use_rsp,
+            rsp,
+            # This action will kill all nodes once the Webots simulation has exited
+            launch.actions.RegisterEventHandler(
+                event_handler=launch.event_handlers.OnProcessExit(
+                    target_action=webots,
+                    on_exit=[launch.actions.EmitEvent(event=launch.events.Shutdown())],
+                )
+            ),
+        ]
+    )
