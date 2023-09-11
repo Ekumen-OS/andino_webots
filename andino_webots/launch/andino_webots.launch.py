@@ -38,9 +38,13 @@ from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions.path_join_substitution import PathJoinSubstitution
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from webots_ros2_driver.urdf_spawner import URDFSpawner
 from webots_ros2_driver.webots_launcher import WebotsLauncher
 from webots_ros2_driver.webots_controller import WebotsController
+from webots_ros2_driver.wait_for_controller_connection import (
+    WaitForControllerConnection,
+)
 
 
 def configure_gazebo_sensors(robot_description: str):
@@ -64,14 +68,15 @@ def configure_gazebo_sensors(robot_description: str):
 
 # Obtain andino webots package
 andino_webots_pkg_dir = get_package_share_directory("andino_webots")
+andino_control_pkg_dir = get_package_share_directory("andino_control")
 
 
 def generate_launch_description():
-    andino_webots_xacro_path = os.path.join(
+    andino_webots_description_xacro_path = os.path.join(
         andino_webots_pkg_dir, "urdf", "andino_webots_description.urdf.xacro"
     )
     andino_webots_description = xacro.process_file(
-        andino_webots_xacro_path,
+        andino_webots_description_xacro_path,
         mappings={"use_gazebo_ros_control": "False", "use_fixed_caster": "False"},
     ).toprettyxml(indent="    ")
     andino_webots_description = configure_gazebo_sensors(andino_webots_description)
@@ -116,10 +121,17 @@ def generate_launch_description():
         translation="0 0 0.022",
         rotation=" 0 0 1 0",
     )
-    # Webots Controller to initialize cameras/LIDARs
+    # Webots Controller to initialize cameras/LIDARs and bridge ROS2
     andino_webots_path = os.path.join(
         andino_webots_pkg_dir, "urdf", "andino_webots.urdf"
     )
+    ros2_control_params = os.path.join(
+        andino_control_pkg_dir, "config", "andino_controllers.yaml"
+    )
+    mappings = [
+        ("/diff_controller/cmd_vel_unstamped", "/cmd_vel"),
+        ("/diff_controller/odom", "/odom"),
+    ]
     andino_webots_controller = WebotsController(
         robot_name="andino",
         parameters=[
@@ -127,8 +139,37 @@ def generate_launch_description():
                 "robot_description": andino_webots_path,
                 "use_sim_time": use_sim_time,
             },
+            ros2_control_params,
         ],
+        remappings=mappings,
         respawn=True,
+    )
+
+    # ROS2 control
+    controller_manager_timeout = ["--controller-manager-timeout", "50"]
+    diffdrive_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        output="screen",
+        arguments=["diff_controller"] + controller_manager_timeout,
+        parameters=[
+            {"use_sim_time": use_sim_time},
+        ],
+    )
+    joint_state_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        output="screen",
+        arguments=["joint_state_broadcaster"] + controller_manager_timeout,
+    )
+    ros_control_spawners = [
+        diffdrive_controller_spawner,
+        joint_state_broadcaster_spawner,
+    ]
+
+    # Wait for the simulation to be ready to start the diff drive and spawners
+    waiting_nodes = WaitForControllerConnection(
+        target_driver=andino_webots_controller, nodes_to_start=ros_control_spawners
     )
 
     # Standard ROS 2 launch description
@@ -144,6 +185,8 @@ def generate_launch_description():
             spawn_andino,
             # Add andino's controller
             andino_webots_controller,
+            waiting_nodes,
+            # Robot state publisher
             use_rsp,
             rsp,
             # This action will kill all nodes once the Webots simulation has exited
