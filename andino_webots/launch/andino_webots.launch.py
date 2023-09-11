@@ -50,11 +50,11 @@ def configure_gazebo_sensors(robot_description: str):
     robot_description = robot_description.replace(
         "</ray>",
         """
-                    <clip>
-                        <near>0.05</near>
-                    </clip>
-                </ray>
-    """,
+                <clip>
+                    <near>0.05</near>
+                </clip>
+            </ray>
+        """,
     )
     robot_description = robot_description.replace(
         '<gazebo reference="camera_link">', '<gazebo reference="webots_camera_link">'
