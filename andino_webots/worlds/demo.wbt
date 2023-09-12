@@ -1,0 +1,643 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/lights/protos/CeilingLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/lights/protos/FloorLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/apartment_structure/protos/Wall.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/apartment_structure/protos/Door.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/bedroom/protos/Bed.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/tables/protos/Table.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/chairs/protos/Chair.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/living_room_furniture/protos/Armchair.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/paintings/protos/LandscapePainting.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
+
+WorldInfo {
+  info [
+    "Andino simulation"
+  ]
+  title "Andino demo"
+  contactProperties [
+    ContactProperties {
+      material2 "andino_caster"
+      coulombFriction [
+        0
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.005397763034802609 0.006406658890225113 0.9999649088223469 1.4008337557502386
+  position -0.1817611678566642 -0.3885742199064494 0.07995518835784826
+  near 0.1
+}
+TexturedBackground {
+}
+CeilingLight {
+  translation 1.82639 -1.29685 2.4
+  pointLightColor 1 1 0.9372549019607843
+  pointLightIntensity 7
+}
+CeilingLight {
+  translation -3.25511 1.9443400000000004 2.4
+  name "ceiling light(2)"
+  pointLightIntensity 6
+}
+FloorLight {
+  translation -4.528276895458201 -4.2693419342918375 0
+  pointLightIntensity 2
+}
+Wall {
+  translation 5 0 0
+  size 0.3 10.3 2.4
+}
+Wall {
+  translation 0 5 0
+  rotation 0 0 1 1.5708
+  name "wall(2)"
+  size 0.3 9.7 2.4
+}
+Wall {
+  translation -5 0 0
+  name "wall(3)"
+  size 0.3 10.3 2.4
+}
+Wall {
+  translation 0 -5 0
+  rotation 0 0 1 1.5708
+  name "wall(4)"
+  size 0.3 9.7 2.4
+}
+Wall {
+  translation -1.65 2.675 0
+  name "wall(5)"
+  size 0.3 4.35 2.4
+}
+Wall {
+  translation -1.65 -1.15 0
+  name "wall(6)"
+  size 0.3 1.3 2.4
+}
+Door {
+  hidden translation_5 0.0011419459621392902 5.944295874704686e-05 6.661338147750939e-16
+  hidden rotation_5 0 0 -1 0.0002988149054620967
+  translation -1.65 0 0
+  size 0.3 1 2.4
+  position -0.0002988149049724645
+}
+Bed {
+  translation 3.75 3.2800000002397445 0
+  rotation 0 0 1 3.1415
+}
+Table {
+  translation -3.28632 -3.86254 0
+}
+Chair {
+  translation -3.72164 -3.47751 0
+  rotation 0 0 -1 -0.11945530717958608
+}
+Table {
+  translation 2.2745 -0.476732 0
+  rotation 0 0 1 0.534482
+  name "table(2)"
+  size 0.8 1.2 0.53
+}
+Armchair {
+  translation 3.5894 0.323101 0
+  rotation 0 0 1 -2.5895153071795862
+}
+LandscapePainting {
+  translation 0.292736 -4.77308 1.5
+  rotation 0 0 1 1.5708
+}
+Solid {
+  children [
+    Shape {
+      appearance Parquetry {
+        textureTransform TextureTransform {
+          scale 7 7
+        }
+      }
+      geometry Plane {
+        size 10 10
+      }
+    }
+  ]
+  boundingObject Plane {
+    size 9.9 9.9
+  }
+}
+Robot {
+  translation 0.00024684324511952196 -4.980571939431025e-10 0.04944332154293587
+  rotation 2.0704940040826808e-06 0.9999999999978565 -1.0130407433654466e-08 0.004808387434044794
+  children [
+    Solid {
+      translation -0.077 0 0.00452
+      rotation 2.3097811164024258e-06 0.6150831055420563 0.7884622839878928 1.3978528260658475e-07
+      children [
+        Pose {
+          translation 0 0 -0.02
+          children [
+            Shape {
+              appearance DEF silver PBRAppearance {
+                baseColor 0.75 0.75 0.75
+                roughness 1
+                metalness 0
+              }
+              geometry DEF caster_base Mesh {
+                url [
+                  "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/andino/caster_base.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "caster_base_link"
+      boundingObject Pose {
+        translation 0 0 -0.02
+        children [
+          Box {
+            size 0.04 0.04 0.04
+          }
+        ]
+      }
+      physics Physics {
+        density -1
+        mass 0.02
+        centerOfMass [
+          0 0 -0.02
+        ]
+        inertiaMatrix [
+          5.333333e-06 5.333333e-06 5.333333e-06
+          0 0 0
+        ]
+      }
+    }
+    Shape {
+      appearance DEF blue PBRAppearance {
+        baseColor 0 0.1 0.8
+        roughness 1
+        metalness 0
+      }
+      geometry DEF chassis Mesh {
+        url [
+          "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/andino/chassis.stl"
+        ]
+      }
+    }
+    Solid {
+      children [
+        Pose {
+          translation 0 0 0.05
+          children [
+            Shape {
+              appearance USE blue
+              geometry USE chassis
+            }
+          ]
+        }
+        Solid {
+          translation 0.05 0 0.08
+          rotation 0 0 1 3.141593
+          children [
+            Pose {
+              rotation 0 0 1 3.141593
+              children [
+                Shape {
+                  appearance DEF dark_grey PBRAppearance {
+                    baseColor 0.1 0.1 0.1
+                    roughness 1
+                    metalness 0
+                  }
+                  geometry DEF rplidar-a1 Mesh {
+                    url [
+                      "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/sensors/rplidar-a1.stl"
+                    ]
+                  }
+                }
+              ]
+            }
+            Lidar {
+              name "sensor_ray_front"
+              horizontalResolution 720
+              fieldOfView 6.283185
+              numberOfLayers 1
+              near 0.05
+              minRange 0.1
+              maxRange 12
+              noise 0.000833
+              resolution 0.01
+            }
+          ]
+          name "rplidar_laser_link"
+          boundingObject Cylinder {
+            height 0.01
+            radius 0.015
+          }
+          physics Physics {
+            density -1
+            mass 0.1
+            centerOfMass [
+              0 0 0
+            ]
+            inertiaMatrix [
+              6.458333e-06 6.458333e-06 1.125e-05
+              0 0 0
+            ]
+          }
+        }
+      ]
+      name "second_base_link"
+      boundingObject Box {
+        size 0.195 0.08 0.005
+      }
+      physics Physics {
+        density -1
+        mass 0.8
+        centerOfMass [
+          0 0 0
+        ]
+        inertiaMatrix [
+          0.0004283333 0.002536667 0.002961667
+          0 0 0
+        ]
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 5.878673553419076e-09
+        axis 0 1 0
+        anchor 0.0185 -0.0675 -0.017
+        dampingConstant 0.01
+      }
+      device [
+        RotationalMotor {
+          name "right_wheel_joint"
+          maxTorque 10000
+        }
+        PositionSensor {
+          name "right_wheel_joint_sensor"
+        }
+      ]
+      endPoint Solid {
+        translation 0.0185 -0.0675 -0.017
+        rotation 0 1 0 0
+        children [
+          Pose {
+            rotation 0 -0.7071067811865476 -0.7071067811865476 3.141593
+            children [
+              Shape {
+                appearance USE dark_grey
+                geometry DEF wheel Mesh {
+                  url [
+                    "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/andino/../components/wheel.stl"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+        name "right_wheel"
+        boundingObject Pose {
+          rotation 1 0 0 1.570796
+          children [
+            Cylinder {
+              height 0.025
+              radius 0.0331
+            }
+          ]
+        }
+        physics Physics {
+          density -1
+          mass 0.032
+          centerOfMass [
+            0 0 0
+          ]
+          inertiaMatrix [
+            1.043155e-05 1.752976e-05 1.043155e-05
+            0 0 4.346402e-22
+          ]
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor -0.077 0 0.0045
+        dampingConstant 0.01
+      }
+      device [
+        PositionSensor {
+          name "caster_base_joint"
+        }
+      ]
+      endPoint Solid {
+        translation -0.077 4.2319199999999215e-15 0.00452
+        rotation 2.777982938728817e-06 0.7212489087542509 -0.692675978804726 1.1920928955078128e-07
+        children [
+          Pose {
+            translation 0 0 -0.02
+            children [
+              Shape {
+                appearance DEF silver PBRAppearance {
+                  baseColor 0.75 0.75 0.75
+                  roughness 1
+                  metalness 0
+                }
+                geometry DEF caster_wheel_support Mesh {
+                  url [
+                    "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/andino/caster_wheel_support.stl"
+                  ]
+                }
+              }
+            ]
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              axis 0 1 0
+              anchor -0.015 0 -0.04
+            }
+            device [
+              PositionSensor {
+                name "caster_wheel_joint"
+              }
+            ]
+            endPoint Solid {
+              translation 5.204170427930421e-18 0 0
+              rotation 0 1 0 0
+              children [
+                Solid {
+                  translation -0.016 0 -0.04
+                  children [
+                    Shape {
+                      appearance DEF black PBRAppearance {
+                        baseColor 0 0 0
+                        roughness 1
+                        metalness 0
+                      }
+                      geometry DEF caster_wheel Mesh {
+                        url [
+                          "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/andino/caster_wheel.stl"
+                        ]
+                      }
+                    }
+                  ]
+                  name "caster_wheel_link"
+                  boundingObject Pose {
+                    rotation 1 0 0 1.570796
+                    children [
+                      Cylinder {
+                        height 0.01
+                        radius 0.015
+                      }
+                    ]
+                  }
+                  physics Physics {
+                    density -1
+                    mass 0.5
+                    centerOfMass [
+                      0 0 0
+                    ]
+                    inertiaMatrix [
+                      3.229167e-05 3.229167e-05 5.625e-05
+                      0 0 0
+                    ]
+                  }
+                }
+              ]
+              name "caster_rotation_link"
+              boundingObject Pose {
+                translation 0 0 -0.02
+                children [
+                  Box {
+                    size 0.04 0.04 0.04
+                  }
+                ]
+              }
+              physics Physics {
+                density -1
+                mass 0.02
+                centerOfMass [
+                  0 0 -0.02
+                ]
+                inertiaMatrix [
+                  5.333333e-06 5.333333e-06 5.333333e-06
+                  0 0 0
+                ]
+              }
+            }
+          }
+        ]
+        name "caster_wheel_support_link"
+        physics Physics {
+          density -1
+          mass 0.02
+          centerOfMass [
+            0 0 -0.02
+          ]
+          inertiaMatrix [
+            5.333333e-06 5.333333e-06 5.333333e-06
+            0 0 0
+          ]
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 5.878674318789511e-09
+        axis 0 1 0
+        anchor 0.0185 0.0675 -0.017
+        dampingConstant 0.01
+      }
+      device [
+        RotationalMotor {
+          name "left_wheel_joint"
+          maxTorque 10000
+        }
+        PositionSensor {
+          name "left_wheel_joint_sensor"
+        }
+      ]
+      endPoint Solid {
+        translation 0.0185 0.0675 -0.017
+        rotation 0 1 0 0
+        children [
+          Pose {
+            rotation 1 0 0 1.570796
+            children [
+              Shape {
+                appearance USE dark_grey
+                geometry USE wheel
+              }
+            ]
+          }
+        ]
+        name "left_wheel"
+        boundingObject Pose {
+          rotation 1 0 0 1.570796
+          children [
+            Cylinder {
+              height 0.025
+              radius 0.0331
+            }
+          ]
+        }
+        physics Physics {
+          density -1
+          mass 0.032
+          centerOfMass [
+            0 0 0
+          ]
+          inertiaMatrix [
+            1.043155e-05 1.752976e-05 1.043155e-05
+            0 0 4.346402e-22
+          ]
+        }
+      }
+    }
+    Solid {
+      translation 0.0015 -0.03775 -0.017
+      rotation 0 1 0 3.141593
+      children [
+        Pose {
+          rotation 0 0 -1 3.141593
+          children [
+            Shape {
+              appearance DEF red PBRAppearance {
+                baseColor 0.8 0.1 0
+                roughness 1
+                metalness 0
+              }
+              geometry DEF motor Mesh {
+                url [
+                  "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/andino/motor.stl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "right_motor"
+      boundingObject Pose {
+        rotation 1 0 0 1.570796
+        children [
+          Box {
+            size 0.07 0.0225 0.0188
+          }
+        ]
+      }
+      physics Physics {
+        density -1
+        mass 0.1
+        centerOfMass [
+          0 0 0
+        ]
+        inertiaMatrix [
+          7.164083e-06 4.377867e-05 4.505208e-05
+          0 0 0
+        ]
+      }
+    }
+    Solid {
+      translation 0.0015 0.03775 -0.017
+      children [
+        Shape {
+          appearance USE red
+          geometry USE motor
+        }
+      ]
+      name "left_motor"
+      boundingObject Pose {
+        rotation 1 0 0 1.570796
+        children [
+          Box {
+            size 0.07 0.0225 0.0188
+          }
+        ]
+      }
+      physics Physics {
+        density -1
+        mass 0.1
+        centerOfMass [
+          0 0 0
+        ]
+        inertiaMatrix [
+          7.164083e-06 4.377867e-05 4.505208e-05
+          0 0 0
+        ]
+      }
+    }
+    Solid {
+      translation 0.085 0 0.025
+      children [
+        Shape {
+          appearance USE blue
+          geometry DEF camera_mount Mesh {
+            url [
+              "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/sensors/camera_mount.stl"
+            ]
+          }
+        }
+        Solid {
+          rotation -0.5773496025226483 0.5773516025212714 -0.5773496025226483 2.094399
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.5 0.5 0.5
+                roughness 1
+                metalness 0
+              }
+              geometry Box {
+                size 0.001 0.001 0.001
+              }
+            }
+            Pose {
+              rotation 0.5773502691896258 -0.5773502691896258 0.5773502691896258 2.094395
+              children [
+                Camera {
+                  fieldOfView 1.047
+                  width 640
+                  height 480
+                }
+              ]
+            }
+          ]
+          name "webots_camera_link"
+        }
+      ]
+      name "camera_link"
+      boundingObject Box {
+        size 0.02 0.02 0.02
+      }
+      physics Physics {
+        density -1
+        mass 0.1
+        centerOfMass [
+          0 0 0
+        ]
+        inertiaMatrix [
+          6.666667e-06 6.666667e-06 6.666667e-06
+          0 0 0
+        ]
+      }
+    }
+  ]
+  name "andino"
+  boundingObject Box {
+    size 0.195 0.08 0.005
+  }
+  physics Physics {
+    density -1
+    mass 0.8
+    centerOfMass [
+      0 0 0
+    ]
+    inertiaMatrix [
+      0.0004283333 0.002536667 0.002961667
+      0 0 0
+    ]
+  }
+  controller "<extern>"
+  synchronization FALSE
+}
