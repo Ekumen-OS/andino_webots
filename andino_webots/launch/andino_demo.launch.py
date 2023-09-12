@@ -57,7 +57,7 @@ def generate_launch_description():
         ),
         # Define what world will be spawning
         launch_arguments={
-            "world": "demo_con_motores.wbt",
+            "world": "demo.wbt",
         }.items(),
     )
 
