@@ -10,12 +10,10 @@ from webots_ros2_driver.webots_launcher import WebotsLauncher
 def generate_launch_description():
     andino_webots_pkg_dir = get_package_share_directory("andino_webots")
     world = LaunchConfiguration("world")
-    world_arg = (
-        DeclareLaunchArgument(
-            "world",
-            default_value="andino_webots.wbt",
-            description="Choose one of the world files from `/andino_webots/worlds` directory",
-        ),
+    world_arg = DeclareLaunchArgument(
+        "world",
+        default_value="andino_webots.wbt",
+        description="Choose one of the world files from `/andino_webots/worlds` directory",
     )
     webots = WebotsLauncher(
         world=PathJoinSubstitution([andino_webots_pkg_dir, "worlds", world]),
