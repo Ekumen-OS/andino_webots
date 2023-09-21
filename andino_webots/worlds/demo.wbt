@@ -146,7 +146,7 @@ Robot {
               }
               geometry DEF caster_base Mesh {
                 url [
-                  "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/andino/caster_base.stl"
+                  "/home/franco/ws/install/andino_description/share/andino_description/meshes/andino/caster_base.stl"
                 ]
               }
             }
@@ -182,7 +182,7 @@ Robot {
       }
       geometry DEF chassis Mesh {
         url [
-          "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/andino/chassis.stl"
+          "/home/franco/ws/install/andino_description/share/andino_description/meshes/andino/chassis.stl"
         ]
       }
     }
@@ -193,7 +193,11 @@ Robot {
           children [
             Shape {
               appearance USE blue
-              geometry USE chassis
+              geometry DEF chassis Mesh {
+                url [
+                  "/home/franco/ws/install/andino_description/share/andino_description/meshes/andino/chassis_top.stl"
+                ]
+              }
             }
           ]
         }
@@ -212,7 +216,7 @@ Robot {
                   }
                   geometry DEF rplidar-a1 Mesh {
                     url [
-                      "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/sensors/rplidar-a1.stl"
+                      "/home/franco/ws/install/andino_description/share/andino_description/meshes/sensors/rplidar-a1.stl"
                     ]
                   }
                 }
@@ -291,7 +295,7 @@ Robot {
                 appearance USE dark_grey
                 geometry DEF wheel Mesh {
                   url [
-                    "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/andino/../components/wheel.stl"
+                    "/home/franco/ws/install/andino_description/share/andino_description/meshes/andino/../components/wheel.stl"
                   ]
                 }
               }
@@ -347,7 +351,7 @@ Robot {
                 }
                 geometry DEF caster_wheel_support Mesh {
                   url [
-                    "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/andino/caster_wheel_support.stl"
+                    "/home/franco/ws/install/andino_description/share/andino_description/meshes/andino/caster_wheel_support.stl"
                   ]
                 }
               }
@@ -356,7 +360,7 @@ Robot {
           HingeJoint {
             jointParameters HingeJointParameters {
               axis 0 1 0
-              anchor -0.015 0 -0.04
+              anchor -0.016 0 -0.04
             }
             device [
               PositionSensor {
@@ -378,7 +382,7 @@ Robot {
                       }
                       geometry DEF caster_wheel Mesh {
                         url [
-                          "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/andino/caster_wheel.stl"
+                          "/home/franco/ws/install/andino_description/share/andino_description/meshes/andino/caster_wheel.stl"
                         ]
                       }
                     }
@@ -407,14 +411,6 @@ Robot {
                 }
               ]
               name "caster_rotation_link"
-              boundingObject Pose {
-                translation 0 0 -0.02
-                children [
-                  Box {
-                    size 0.04 0.04 0.04
-                  }
-                ]
-              }
               physics Physics {
                 density -1
                 mass 0.02
@@ -505,13 +501,13 @@ Robot {
           children [
             Shape {
               appearance DEF red PBRAppearance {
-                baseColor 0.8 0.1 0
+                baseColor 0 0.5 0.8
                 roughness 1
                 metalness 0
               }
               geometry DEF motor Mesh {
                 url [
-                  "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/andino/motor.stl"
+                  "/home/franco/ws/install/andino_description/share/andino_description/meshes/andino/motor.stl"
                 ]
               }
             }
@@ -575,7 +571,7 @@ Robot {
           appearance USE blue
           geometry DEF camera_mount Mesh {
             url [
-              "/home/zeuz/ws/install/andino_description/share/andino_description/meshes/sensors/camera_mount.stl"
+              "/home/franco/ws/install/andino_description/share/andino_description/meshes/sensors/camera_mount.stl"
             ]
           }
         }
