@@ -37,15 +37,18 @@ CeilingLight {
   translation 1.82639 -1.29685 2.4
   pointLightColor 1 1 0.9372549019607843
   pointLightIntensity 7
+  pointLightCastShadows TRUE
 }
 CeilingLight {
   translation -3.25511 1.9443400000000004 2.4
   name "ceiling light(2)"
   pointLightIntensity 6
+  pointLightCastShadows TRUE
 }
 FloorLight {
   translation -4.528276895458201 -4.2693419342918375 0
   pointLightIntensity 2
+  pointLightCastShadows TRUE
 }
 Wall {
   translation 5 0 0
