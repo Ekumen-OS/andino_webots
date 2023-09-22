@@ -46,6 +46,14 @@ from webots_ros2_driver.wait_for_controller_connection import (
 
 
 def apply_colors(robot_description: str):
+    """
+    Function to provide a hotfix to urdf2webots' issue with color declaration.
+    The package seems to require the color to be defined in a link at least once
+    to be used consecutively. To solve this issue without modifying the andino description package
+    the urdf is modified to define the color on each link that requires it.
+
+    See #210 *https://github.com/cyberbotics/urdf2webots/issues/210)
+    """
     colors_definitions = {
         "yellow": '"1 0.95 0 1"',
         "blue": '"0 0 1 1"',
