@@ -27,8 +27,8 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+import launch
 import os
-import xacro
 
 from ament_index_python.packages import get_package_share_directory
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
