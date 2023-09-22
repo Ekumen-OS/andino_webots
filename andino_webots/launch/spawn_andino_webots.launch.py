@@ -45,6 +45,36 @@ from webots_ros2_driver.wait_for_controller_connection import (
 )
 
 
+def apply_colors(robot_description: str):
+    """
+    Function to provide a hotfix to urdf2webots' issue with color declaration.
+    The package seems to require the color to be defined in a link at least once
+    to be used consecutively. To solve this issue without modifying the andino description package
+    the urdf is modified to define the color on each link that requires it.
+
+    See #210 *https://github.com/cyberbotics/urdf2webots/issues/210)
+    """
+    colors_definitions = {
+        "yellow": '"1 0.95 0 1"',
+        "blue": '"0 0 1 1"',
+        "light_blue": '"0 0.5 0.8 1"',
+        "black": '"0 0 0 1"',
+        "white": '"1 1 1 1"',
+        "red": '"0.8 0.0 0.0 1.0"',
+        "silver": '"0.79 0.82 0.93 1"',
+        "dark_grey": '"0.3 0.3 0.3 1"',
+    }
+    for color_name, color_values in colors_definitions.items():
+        robot_description = robot_description.replace(
+            f'<material name="{color_name}"/>',
+            f"""
+        <material>
+            <color rgba={color_values}/>
+        </material>""",
+        )
+    return robot_description
+
+
 def configure_gazebo_sensors(robot_description: str):
     """
     Configures the lidar's near parameter and attaches the camera to a rotated frame so that
@@ -61,6 +91,7 @@ def configure_gazebo_sensors(robot_description: str):
     robot_description = robot_description.replace(
         '<gazebo reference="camera_link">', '<gazebo reference="webots_camera_link">'
     )
+    robot_description = apply_colors(robot_description)
     return robot_description
 
 
