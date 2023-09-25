@@ -32,13 +32,13 @@
 class NodeRemoverPlugin:
     def __init__(self):
         self.robot_name = None
-        self.unwanted_devices = []
+        self.unwanted_nodes = []
 
     def init(self, webots_node, properties):
         self.robot_name = str(properties["robotName"])
 
         self.__robot = webots_node.robot
-        self.unwanted_devices = [device for device in properties["devices"].split(" ")]
+        self.unwanted_nodes = [node for node in properties["nodes"].split(" ")]
 
     def get_robot(self, robot_name):
         root_node = self.__robot.getRoot()
@@ -56,11 +56,11 @@ class NodeRemoverPlugin:
         if node is not None:
             if (
                 node.getField("name")
-                and node.getField("name").getSFString() in self.unwanted_devices
+                and node.getField("name").getSFString() in self.unwanted_nodes
             ):
                 print(f"Removing {node.getField('name').getSFString()}")
                 node.remove()
-                self.unwanted_devices.remove(node.getField("name").getSFString())
+                self.unwanted_nodes.remove(node.getField("name").getSFString())
                 return
             children = node.getField("children")
             if children is not None:
@@ -70,14 +70,14 @@ class NodeRemoverPlugin:
                     self.remove_node(child_node)
             devices = node.getField("device")
             if devices is not None:
-                for device in [
+                for device_node in [
                     devices.getMFNode(idx) for idx in range(devices.getCount())
                 ]:
-                    self.remove_node(device)
+                    self.remove_node(device_node)
                 self.remove_node(node.getField("endPoint").getSFNode())
 
     def step(self):
-        if self.unwanted_devices:
+        if self.unwanted_nodes:
             try:
                 robot = self.get_robot(self.robot_name)
                 self.remove_node(robot)
