@@ -124,8 +124,3 @@ Solid {
     size 9.9 9.9
   }
 }
-Robot {
-  supervisor TRUE
-  name "SimSupervisor"
-  controller "<extern>"
-}

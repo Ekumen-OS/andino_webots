@@ -21,8 +21,3 @@ TexturedBackgroundLight {
 RectangleArena {
   floorSize 10 10
 }
-Robot {
-  supervisor TRUE
-  name "SimSupervisor"
-  controller "<extern>"
-}
