@@ -28,7 +28,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import os
-import pathlib
 import launch
 import xacro
 
@@ -173,16 +172,6 @@ def generate_launch_description():
         remappings=mappings,
         respawn=True,
     )
-    # Plugin to control supervisor
-    supervisor_plugin_path = os.path.join(andino_webots_pkg_dir, "urdf", "supervisor_plugin.urdf")
-    supervisor_controller = WebotsController(
-        robot_name='SimSupervisor',
-        parameters=[
-            {
-                "robot_description": supervisor_plugin_path
-            }
-        ]
-    )
 
     # ROS2 control
     controller_manager_timeout = ["--controller-manager-timeout", "5000"]
@@ -222,7 +211,6 @@ def generate_launch_description():
             # Robot state publisher
             use_rsp,
             rsp,
-            supervisor_controller,
             # Launch the driver node once the URDF robot is spawned
             launch.actions.RegisterEventHandler(
                 event_handler=launch.event_handlers.OnProcessIO(

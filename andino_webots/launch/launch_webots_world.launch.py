@@ -28,17 +28,27 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import launch
-from launch import LaunchDescription
-from launch.substitutions import LaunchConfiguration
-from launch.actions import DeclareLaunchArgument
-from launch.substitutions.path_join_substitution import PathJoinSubstitution
+import os
+
 from ament_index_python.packages import get_package_share_directory
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, ExecuteProcess
+from launch.conditions import IfCondition
+from launch.substitutions import LaunchConfiguration
+from launch.substitutions.path_join_substitution import PathJoinSubstitution
 from webots_ros2_driver.webots_launcher import WebotsLauncher
+from webots_ros2_driver.webots_controller import WebotsController
 
 
 def generate_launch_description():
     andino_webots_pkg_dir = get_package_share_directory("andino_webots")
     world = LaunchConfiguration("world")
+    remove_devices = LaunchConfiguration("remove_devices")
+    remove_devices_arg = DeclareLaunchArgument(
+        "remove_devices",
+        default_value="false",
+        description="Enable Supervisor robot spawning.",
+    )
     world_arg = DeclareLaunchArgument(
         "world",
         default_value="room.wbt",
@@ -49,11 +59,41 @@ def generate_launch_description():
         ros2_supervisor=True,
     )
 
+    # Launch supervisor
+    supervisor_robot_description = """
+        data: Robot { supervisor TRUE name "SimSupervisor" controller "<extern>"}
+        """
+    command = [
+        "ros2",
+        "service",
+        "call",
+        "/Ros2Supervisor/spawn_node_from_string",
+        "webots_ros2_msgs/srv/SpawnNodeFromString",
+        supervisor_robot_description,
+    ]
+    spawn_supervisor = ExecuteProcess(
+        cmd=command,
+        output="log",
+        condition=IfCondition(remove_devices),
+    )
+    # Plugin to control supervisor
+    node_remover_plugin_path = os.path.join(
+        andino_webots_pkg_dir, "urdf", "supervisor_plugin.urdf"
+    )
+    supervisor_controller = WebotsController(
+        robot_name="SimSupervisor",
+        parameters=[{"robot_description": node_remover_plugin_path}],
+        condition=IfCondition(remove_devices),
+    )
+
     return LaunchDescription(
         [
+            remove_devices_arg,
             world_arg,
             webots,
             webots._supervisor,
+            spawn_supervisor,
+            supervisor_controller,
             # This action will kill all nodes once the Webots simulation has exited
             launch.actions.RegisterEventHandler(
                 event_handler=launch.event_handlers.OnProcessExit(

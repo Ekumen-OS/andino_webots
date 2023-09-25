@@ -44,6 +44,11 @@ def generate_launch_description():
     rsp = LaunchConfiguration("rsp")
     use_sim_time = LaunchConfiguration("use_sim_time")
 
+    remove_devices_arg = DeclareLaunchArgument(
+        "remove_devices",
+        default_value="true",
+        description="Enable Supervisor robot spawning.",
+    )
     use_rsp = DeclareLaunchArgument(
         "rsp",
         default_value="true",
@@ -70,6 +75,7 @@ def generate_launch_description():
         # Define what world will be spawning
         launch_arguments={
             "world": world,
+            "remove_devices": LaunchConfiguration("remove_devices"),
         }.items(),
     )
 
@@ -88,6 +94,7 @@ def generate_launch_description():
     # Standard ROS 2 launch description
     return launch.LaunchDescription(
         [
+            remove_devices_arg,
             use_rsp,
             use_sim_time_arg,
             world_argument,
