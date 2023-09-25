@@ -27,18 +27,14 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-import rclpy
 
 
-class WebotsSupervisorPlugin:
+class NodeRemoverPlugin:
     def __init__(self):
         self.robot_name = None
         self.unwanted_devices = []
 
     def init(self, webots_node, properties):
-        rclpy.init(args=None)
-        self.__node = rclpy.create_node("Webots_supervisor_node")
-        self.__node.get_logger().info("  - properties: " + str(properties))
         self.robot_name = str(properties["robotName"])
 
         self.__robot = webots_node.robot
@@ -62,9 +58,7 @@ class WebotsSupervisorPlugin:
                 node.getField("name")
                 and node.getField("name").getSFString() in self.unwanted_devices
             ):
-                self.__node.get_logger().info(
-                    f"Removing {node.getField('name').getSFString()}"
-                )
+                print(f"Removing {node.getField('name').getSFString()}")
                 node.remove()
                 self.unwanted_devices.remove(node.getField("name").getSFString())
                 return
@@ -83,10 +77,9 @@ class WebotsSupervisorPlugin:
                 self.remove_node(node.getField("endPoint").getSFNode())
 
     def step(self):
-        rclpy.spin_once(self.__node, timeout_sec=0)
         if self.unwanted_devices:
             try:
                 robot = self.get_robot(self.robot_name)
                 self.remove_node(robot)
             except Exception as ex:
-                self.__node.get_logger().info(f"Exception {ex}!")
+                print(f"Exception {ex}!")

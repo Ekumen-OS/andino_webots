@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot name="SimSupervisor">
     <webots>
-        <plugin type="webots_supervisor_plugin.webots_supervisor_plugin.WebotsSupervisorPlugin">
+        <plugin type="node_remover_plugin.node_remover_plugin.NodeRemoverPlugin">
             <robotName>andino</robotName>
             <devices>caster_rotation_joint caster_wheel_joint</devices>
         </plugin>
