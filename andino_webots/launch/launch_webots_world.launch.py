@@ -45,7 +45,7 @@ def generate_launch_description():
     remove_nodes_arg = DeclareLaunchArgument(
         "remove_nodes",
         default_value="false",
-        description="Enable Supervisor robot spawning.",
+        description="Enable NodeRemover robot spawning.",
     )
     world_arg = DeclareLaunchArgument(
         "world",
