@@ -111,25 +111,25 @@ def generate_launch_description():
         default_value="true",
     )
 
-    andino_gazebo_xacro_path = os.path.join(
+    andino_description_xacro_path = os.path.join(
         andino_webots_pkg_dir, "urdf", "andino_webots_description.urdf.xacro"
     )
-    andino_gazebo_description = xacro.process_file(
-        andino_gazebo_xacro_path,
+    andino_description = xacro.process_file(
+        andino_description_xacro_path,
         mappings={"use_gazebo_ros_control": "False", "use_fixed_caster": "False"},
     ).toprettyxml(indent="    ")
-    andino_gazebo_description = configure_gazebo_sensors(andino_gazebo_description)
+    andino_description = configure_gazebo_sensors(andino_description)
 
     # TODO(#12): Update to PROTOSpawner when implementation is released
     spawn_andino = URDFSpawner(
         name="andino",
-        robot_description=andino_gazebo_description,
+        robot_description=andino_description,
         translation="0 0 0.022",
         rotation=" 0 0 1 0",
     )
 
     # Robot state publisher
-    params = {"robot_description": andino_gazebo_description, "publish_frequency": 30.0}
+    params = {"robot_description": andino_description, "publish_frequency": 30.0}
     rsp = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
@@ -145,7 +145,7 @@ def generate_launch_description():
         output="screen",
         additional_env={"WEBOTS_CONTROLLER_URL": "Andino Webots"},
         parameters=[
-            {"robot_description": andino_gazebo_description},
+            {"robot_description": andino_description},
         ],
     )
     # Webots Controller to initialize cameras/LIDARs
