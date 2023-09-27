@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<robot name="NodeRemover">
+    <webots>
+        <!--
+        Given the impossibility to create a free rotating joint via urdf2webots
+        the motors associated to the Andino's caster are removed manually, 
+        to get a free rotating caster wheel.
+        -->
+        <plugin type="node_remover_plugin.node_remover_plugin.NodeRemoverPlugin">
+            <robotName>andino</robotName>
+            <nodes>caster_rotation_joint caster_wheel_joint</nodes>
+        </plugin>
+    </webots>
+</robot>

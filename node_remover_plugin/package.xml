@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>node_remover_plugin</name>
+  <version>0.0.1</version>
+  <description>Plugin for webots Supervisor robot to remove specific nodes from a robot in the simulation.</description>
+  <maintainer email="ignacio.davila@ekumenlabs.com">Ignacio Davila Gallesio</maintainer>
+  
+  <license file="LICENSE">BSD Clause 3</license>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

@@ -44,6 +44,11 @@ def generate_launch_description():
     rsp = LaunchConfiguration("rsp")
     use_sim_time = LaunchConfiguration("use_sim_time")
 
+    remove_nodes_arg = DeclareLaunchArgument(
+        "remove_nodes",
+        default_value="true",
+        description="Enable NodeRemover robot spawning.",
+    )
     use_rsp = DeclareLaunchArgument(
         "rsp",
         default_value="true",
@@ -70,6 +75,7 @@ def generate_launch_description():
         # Define what world will be spawning
         launch_arguments={
             "world": world,
+            "remove_nodes": LaunchConfiguration("remove_nodes"),
         }.items(),
     )
 
@@ -88,6 +94,7 @@ def generate_launch_description():
     # Standard ROS 2 launch description
     return launch.LaunchDescription(
         [
+            remove_nodes_arg,
             use_rsp,
             use_sim_time_arg,
             world_argument,
