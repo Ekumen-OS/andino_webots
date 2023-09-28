@@ -67,7 +67,7 @@ def apply_colors(robot_description: str):
         robot_description = robot_description.replace(
             f'<material name="{color_name}"/>',
             f"""
-        <material>
+        <material name="{color_name}">
             <color rgba={color_values}/>
         </material>""",
         )
@@ -139,15 +139,6 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration("rsp")),
     )
 
-    andino_robot_driver = Node(
-        package="webots_ros2_driver",
-        executable="driver",
-        output="screen",
-        additional_env={"WEBOTS_CONTROLLER_URL": "Andino Webots"},
-        parameters=[
-            {"robot_description": andino_description},
-        ],
-    )
     # Webots Controller to initialize cameras/LIDARs
     andino_webots_path = os.path.join(
         andino_webots_pkg_dir, "urdf", "andino_webots.urdf"
@@ -211,21 +202,5 @@ def generate_launch_description():
             # Robot state publisher
             use_rsp,
             rsp,
-            # Launch the driver node once the URDF robot is spawned
-            launch.actions.RegisterEventHandler(
-                event_handler=launch.event_handlers.OnProcessIO(
-                    target_action=spawn_andino,
-                    on_stdout=lambda event: get_webots_driver_node(
-                        event, andino_robot_driver
-                    ),
-                )
-            ),
-            # Kill all the nodes when the driver node is shut down (useful with other ROS 2 nodes)
-            launch.actions.RegisterEventHandler(
-                event_handler=launch.event_handlers.OnProcessExit(
-                    target_action=andino_robot_driver,
-                    on_exit=[launch.actions.EmitEvent(event=launch.events.Shutdown())],
-                )
-            ),
         ]
     )
