@@ -48,6 +48,7 @@ CeilingLight {
 FloorLight {
   translation -4.528276895458201 -4.2693419342918375 0
   pointLightIntensity 2
+  pointLightCastShadows TRUE
 }
 Wall {
   translation 5 0 0
