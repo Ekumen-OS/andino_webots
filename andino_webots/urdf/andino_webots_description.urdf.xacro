@@ -3,9 +3,9 @@
   <!-- 
     In order for the generated proto to add Webots senors the origin urdf must contain gazebo-specific
   sensors.
-    The andino_gazebo xacro is used as base rather than the andino description to addresss this 
+    The andino_gz_classic xacro is used as base rather than the andino description to addresss this 
   -->
-  <xacro:include filename="$(find andino_gazebo)/urdf/andino.gazebo.xacro" />
+  <xacro:include filename="$(find andino_gz_classic)/urdf/andino_gz_classic.xacro" />
 
   <link name="webots_camera_link">
     <visual>
