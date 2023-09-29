@@ -42,11 +42,6 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 def generate_launch_description():
     andino_webots_pkg_dir = get_package_share_directory("andino_webots")
     world = LaunchConfiguration("world")
-    remove_nodes_arg = DeclareLaunchArgument(
-        "remove_nodes",
-        default_value="false",
-        description="Enable NodeRemover robot spawning.",
-    )
     world_arg = DeclareLaunchArgument(
         "world",
         default_value="room.wbt",
@@ -57,24 +52,11 @@ def generate_launch_description():
         ros2_supervisor=True,
     )
 
-    # Include nbode remover supervisor plugin launch file
-    include_supervisor = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(andino_webots_pkg_dir, "launch", "remove_nodes.launch.py"),
-        ),
-        # Define what world will be spawning
-        launch_arguments={
-            "remove_nodes": LaunchConfiguration("remove_nodes"),
-        }.items(),
-    )
-
     return LaunchDescription(
         [
-            remove_nodes_arg,
             world_arg,
             webots,
             webots._supervisor,
-            include_supervisor,
             # This action will kill all nodes once the Webots simulation has exited
             launch.actions.RegisterEventHandler(
                 event_handler=launch.event_handlers.OnProcessExit(
