@@ -50,8 +50,6 @@ def apply_colors(robot_description: str):
     The package seems to require the color to be defined in a link at least once
     to be used consecutively. To solve this issue without modifying the andino description package
     the urdf is modified to define the color on each link that requires it
-    with a new name (different than the rviz color definition).
-
     See #210 *https://github.com/cyberbotics/urdf2webots/issues/210)
     """
     colors_definitions = {
@@ -68,7 +66,7 @@ def apply_colors(robot_description: str):
         robot_description = robot_description.replace(
             f'<material name="{color_name}"/>',
             f"""
-        <material name="{color_name}_webots">
+        <material>
             <color rgba={color_values}/>
         </material>""",
         )
@@ -119,12 +117,12 @@ def generate_launch_description():
         andino_description_xacro_path,
         mappings={"use_gazebo_ros_control": "False", "use_fixed_caster": "False"},
     ).toprettyxml(indent="    ")
-    andino_description = configure_gazebo_sensors(andino_description)
+    andino_webots_description = configure_gazebo_sensors(andino_description)
 
     # TODO(#12): Update to PROTOSpawner when implementation is released
     spawn_andino = URDFSpawner(
         name="andino",
-        robot_description=andino_description,
+        robot_description=andino_webots_description,
         translation="0 0 0.022",
         rotation=" 0 0 1 0",
     )
