@@ -49,7 +49,8 @@ def apply_colors(robot_description: str):
     Function to provide a hotfix to urdf2webots' issue with color declaration.
     The package seems to require the color to be defined in a link at least once
     to be used consecutively. To solve this issue without modifying the andino description package
-    the urdf is modified to define the color on each link that requires it.
+    the urdf is modified to define the color on each link that requires it
+    with a new name (different than the rviz color definition).
 
     See #210 *https://github.com/cyberbotics/urdf2webots/issues/210)
     """
@@ -67,7 +68,7 @@ def apply_colors(robot_description: str):
         robot_description = robot_description.replace(
             f'<material name="{color_name}"/>',
             f"""
-        <material name="{color_name}">
+        <material name="{color_name}_webots">
             <color rgba={color_values}/>
         </material>""",
         )
