@@ -75,7 +75,6 @@ def generate_launch_description():
         # Define what world will be spawning
         launch_arguments={
             "world": world,
-            "remove_nodes": LaunchConfiguration("remove_nodes"),
         }.items(),
     )
 
@@ -91,6 +90,17 @@ def generate_launch_description():
         }.items(),
     )
 
+    # Include node remover supervisor plugin launch file
+    include_supervisor = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(andino_webots_pkg_dir, "launch", "remove_nodes.launch.py"),
+        ),
+        # Define what world will be spawning
+        launch_arguments={
+            "remove_nodes": LaunchConfiguration("remove_nodes"),
+        }.items(),
+    )
+
     # Standard ROS 2 launch description
     return launch.LaunchDescription(
         [
@@ -100,5 +110,6 @@ def generate_launch_description():
             world_argument,
             include_webots_world,
             include_spawn_andino,
+            include_supervisor,
         ]
     )
