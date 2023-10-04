@@ -1,18 +1,21 @@
 # :lady_beetle: Andino Webots Simulation
 
-<!-- Image of andino in webots with shadows and stuff -->
-<!-- Description and purpose -->
 ![Andino webots simulation](andino_webots/docs/andino_sim.png)
 
 ## :clipboard: Description
 
-This package provides a simulation environment for Andino in Webots using [webots_ros2](https://github.com/cyberbotics/webots_ros2) to integrate it with ROS 2.
+This package provides a simulation environment for [Andino](https://github.com/Ekumen-OS/andino) in Webots using [webots_ros2](https://github.com/cyberbotics/webots_ros2) to integrate it with ROS 2.
 
 `Webots` uses [PROTO](https://cyberbotics.com/doc/reference/proto) as their robot description format, while the `Andino` robot description is written in `URDF` format.  
 The [urdf2webots](https://github.com/cyberbotics/urdf2webots) package provides a tool to convert a `URDF` robot description to a `Webots`-compatible proto file. This tool is used by the `webots_ros2` package to convert the robot description in runtime.
 
-## :inbox_tray: Installation 
+## :clamp: Platforms
 
+- ROS 2: Humble Hawksbill
+- OS:
+  - Ubuntu 22.04 Jammy Jellyfish
+
+## :inbox_tray: Installation
 
 This package makes use of some packages from https://github.com/Ekumen-OS/andino repository. Therefore, the repository is brought as a git submodule.
 For so, when cloning this repository make sure to also init the submodules, this can be done adding a `--recursive` flag to the `git clone` command
@@ -102,3 +105,10 @@ The NodeRemover is a custom `webots_ros2` Supervisor plugin that allows users to
 The associated [launchfile](./andino_webots/launch/remove_nodes.launch.py) spawns a Supervisor robot in a running simulation and attaches the [node_remover_plugin](./node_remover_plugin/node_remover_plugin/node_remover_plugin.py) to it, which takes in a robot's name and list of the nodes to be removed as parameters.  
 It's provided in this package as an example of the tool's capabilities, as well as a means of providing a workaround for `urdf2webots` not having a straightforward way to generate a free rotating joint, removing the caster's motor Nodes.
 
+## :raised_hands: Contributing
+
+Issues or PRs are always welcome! Please refer to [CONTRIBUTING](CONTRIBUTING.md) doc.
+
+## Code development
+
+Note that a [`Docker`](./docker) folder is provided for easy setting up the workspace.
