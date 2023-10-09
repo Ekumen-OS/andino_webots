@@ -26,7 +26,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive \
 
 RUN apt-get update && \
     apt-get -y dist-upgrade && \
-    . /opt/ros/humble/setup.sh && \
     rm -rf /var/lib/apt/lists/*
 
 # Create a user with passwordless sudo

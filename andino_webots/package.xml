@@ -15,8 +15,8 @@
   <exec_depend>andino_description</exec_depend>
   <exec_depend>andino_gz_classic</exec_depend>
   <exec_depend>node_remover_plugin</exec_depend>
-  <exec_depend>xacro</exec_depend>
   <exec_depend>webots_ros2</exec_depend>
+  <exec_depend>xacro</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
