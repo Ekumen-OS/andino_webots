@@ -23,16 +23,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive \
     apt-get install -y \
     webots
 
-# TODO: Install package's specific version via rosdep
-# Install the 2023.1.1 release of webots_ros2
-ARG WEBOTS_ROS2_WS=/webots_ros2_ws
-RUN git clone --recurse-submodules --branch 2023.1.1 https://github.com/cyberbotics/webots_ros2.git ${WEBOTS_ROS2_WS}/src/webots_ros2
 
 RUN apt-get update && \
     apt-get -y dist-upgrade && \
-    . /opt/ros/humble/setup.sh && \
-    rosdep install --from-paths ${WEBOTS_ROS2_WS}/src --ignore-src -r -y && \
-    colcon build --base-paths ${WEBOTS_ROS2_WS}/src/ --build-base ${WEBOTS_ROS2_WS}/build --install-base ${WEBOTS_ROS2_WS}/install && \
     rm -rf /var/lib/apt/lists/*
 
 # Create a user with passwordless sudo
@@ -40,7 +33,6 @@ RUN adduser --uid $USERID --gecos "ekumen developer" --disabled-password $USER
 RUN adduser $USER sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN echo "export QT_X11_NO_MITSHM=1" >> /home/$USER/.bashrc
-RUN echo "source ${WEBOTS_ROS2_WS}/install/local_setup.bash" >> /home/$USER/.bashrc
 USER $USER
 
 # Adds USER to dialout and plugdev group.
