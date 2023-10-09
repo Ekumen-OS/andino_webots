@@ -31,5 +31,3 @@ jobs:
       with:
         package-name: andino_webots
         target-ros2-distro: ${{ env.ROS_DISTRO }}
-        import-token: ${{ secrets.GITHUB_TOKEN }}
-        vcs-repo-file-url: ${GITHUB_WORKSPACE}/.github/dependencies.repos
