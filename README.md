@@ -54,7 +54,7 @@ Once the package is built and sourced, you can start an empty simulation by runn
 
 
 ```sh
-ros2 launch andino_webots launch_webots_world.launch.py world:=andino_webots
+ros2 launch andino_webots launch_webots_world.launch.py world:=andino_webots.wbt
 ```
 
 This launch file starts an empty simulation in a world given by the `world` argument. This argument defines the wbt file of the world where andino will run. It should be present in the package's `world` folder.   
